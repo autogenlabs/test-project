@@ -1,0 +1,44 @@
+services:
+  - name: backend-service
+    type: web
+    env: node
+    rootDir: be
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: my-database
+          property: connectionString
+      - key: DB_HOST
+        value: localhost
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USER
+        value: postgres
+      - key: DB_PASSWORD
+        value: 12345678p
+      - key: JWT_SECRET
+        value: P9nwr2XBzbhvCYQmANx387GdsKLp5TV6
+      - key: JWT_ACCESS_EXPIRATION_MINUTES
+        value: "60"
+      - key: JWT_REFRESH_EXPIRATION_DAYS
+        value: "1"
+      - key: JWT_RESET_PASSWORD_EXPIRATION_MINUTES
+        value: "44"
+      - key: JWT_VERIFY_EMAIL_EXPIRATION_MINUTES
+        value: "44"
+      - key: PORT
+        value: 3000
+
+  - name: frontend-service
+    type: web
+    env: static
+    rootDir: fe
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_baseURL
+        value: https://backend-service.onrender.com
